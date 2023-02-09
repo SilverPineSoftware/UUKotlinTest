@@ -43,6 +43,7 @@ dependencies {
 
     implementation 'androidx.annotation:annotation:1.5.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.test.ext:junit:1.1.5'
 
     implementation "com.silverpine.uu:uu-core-ktx:${uu_core_version}"
 
