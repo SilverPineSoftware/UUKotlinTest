@@ -1,5 +1,6 @@
 package com.silverpine.uu.test
 
+import androidx.lifecycle.LiveData
 import org.junit.Assert
 
 object UUAssert
@@ -12,5 +13,13 @@ object UUAssert
     fun areSameNullness(lhs: Any?, rhs: Any?): Boolean
     {
         return lhs == null && rhs == null || lhs != null && rhs != null
+    }
+
+    fun <T> assertEquals(expected: T, liveData: LiveData<T>)
+    {
+        uuDispatchMainAndWait()
+        {
+            Assert.assertEquals(expected, liveData.value)
+        }
     }
 }
