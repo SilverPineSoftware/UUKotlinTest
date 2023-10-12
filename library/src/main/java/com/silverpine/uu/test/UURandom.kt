@@ -1,42 +1,43 @@
 package com.silverpine.uu.test
 
 import androidx.annotation.VisibleForTesting
-import com.silverpine.uu.core.UURandom
+import java.nio.ByteBuffer
+import java.security.SecureRandom
 
 private val UPPER_CASE = Pair('A','Z')
 private val LOWER_CASE = Pair('a','z')
 private val NUMBERS = Pair('0','9')
 
 @VisibleForTesting
-fun UURandom.letters(maxLength: Int): String
+fun uuRandomLetters(maxLength: Int): String
 {
-    return chars(maxLength, arrayListOf(UPPER_CASE, LOWER_CASE))
+    return uuRandomChars(maxLength, arrayListOf(UPPER_CASE, LOWER_CASE))
 }
 
 @VisibleForTesting
-fun UURandom.numbers(maxLength: Int): String
+fun uuRandomNumbers(maxLength: Int): String
 {
-    return chars(maxLength, arrayListOf(NUMBERS))
+    return uuRandomChars(maxLength, arrayListOf(NUMBERS))
 }
 
 @VisibleForTesting
-fun UURandom.lettersOrNumbers(maxLength: Int): String
+fun uuRandomLettersOrNumbers(maxLength: Int): String
 {
-    return chars(maxLength, arrayListOf(UPPER_CASE, LOWER_CASE, NUMBERS))
+    return uuRandomChars(maxLength, arrayListOf(UPPER_CASE, LOWER_CASE, NUMBERS))
 }
 
 @VisibleForTesting
-fun UURandom.chars(
+fun uuRandomChars(
     maxLength: Int,
     ranges: ArrayList<Pair<Char,Char>> = arrayListOf(Pair(Char.MIN_VALUE, Char.MAX_VALUE))): String
 {
-    val length = int(maxLength)
+    val length = uuRandomInt(maxLength)
 
     val sb = StringBuilder()
 
     while (sb.length < length)
     {
-        val c = char()
+        val c = uuRandomChar()
 
         for (i in 0 until ranges.size)
         {
@@ -52,22 +53,47 @@ fun UURandom.chars(
 }
 
 @VisibleForTesting
-fun UURandom.word(maxLength: Int): String
+fun uuRandomWord(maxLength: Int): String
 {
-    return letters(maxLength)
+    return uuRandomLetters(maxLength)
 }
 
 @VisibleForTesting
-fun UURandom.words(maxNumberOfWords: Int, maxWordLength: Int): String
+fun uuRandomWords(maxNumberOfWords: Int, maxWordLength: Int): String
 {
     val sb = StringBuilder()
-    val words = int(maxNumberOfWords)
+    val words = uuRandomInt(maxNumberOfWords)
 
     for (i in 0 until words)
     {
-        sb.append(word(maxWordLength))
+        sb.append(uuRandomWord(maxWordLength))
         sb.append(" ")
     }
 
     return sb.toString()
+}
+
+private val rando = SecureRandom()
+fun uuRandomInt(max: Int): Int
+{
+    var max = max
+    if (max < 1)
+    {
+        max = Byte.MAX_VALUE.toInt()
+    }
+
+    return rando.nextInt(max)
+}
+
+fun uuRandomBytes(count: Int): ByteArray
+{
+    val buffer = ByteArray(count)
+    rando.nextBytes(buffer)
+    return buffer
+}
+
+fun uuRandomChar(): Char
+{
+    val bb = ByteBuffer.wrap(uuRandomBytes(Short.SIZE_BYTES))
+    return Char(bb.short.toUShort())
 }

@@ -54,6 +54,7 @@
                   <entry key="R5CRC2HEMMP" value="120" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung&#10; SM-G990U" value="120" />
+                  <entry key="samsung SM-G990U" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

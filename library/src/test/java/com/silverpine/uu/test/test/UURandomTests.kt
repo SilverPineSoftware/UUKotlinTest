@@ -1,7 +1,11 @@
 package com.silverpine.uu.test.test
 
-import com.silverpine.uu.core.UURandom
-import com.silverpine.uu.test.*
+import com.silverpine.uu.test.uuRandomInt
+import com.silverpine.uu.test.uuRandomLetters
+import com.silverpine.uu.test.uuRandomLettersOrNumbers
+import com.silverpine.uu.test.uuRandomNumbers
+import com.silverpine.uu.test.uuRandomWord
+import com.silverpine.uu.test.uuRandomWords
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 
@@ -14,8 +18,8 @@ class UURandomTests
     {
         for (i in 0 until kLoops)
         {
-            val length = UURandom.uByte().toInt()
-            val actual = UURandom.letters(length)
+            val length = uuRandomInt(255)
+            val actual = uuRandomLetters(length)
             assertNotNull(actual)
             println("UURandom.letters: $actual")
         }
@@ -26,8 +30,8 @@ class UURandomTests
     {
         for (i in 0 until kLoops)
         {
-            val length = UURandom.uByte().toInt()
-            val actual = UURandom.numbers(length)
+            val length = uuRandomInt(255)
+            val actual = uuRandomNumbers(length)
             assertNotNull(actual)
             println("UURandom.numbers: $actual")
         }
@@ -38,8 +42,8 @@ class UURandomTests
     {
         for (i in 0 until kLoops)
         {
-            val length = UURandom.uByte().toInt()
-            val actual = UURandom.lettersOrNumbers(length)
+            val length = uuRandomInt(255)
+            val actual = uuRandomLettersOrNumbers(length)
             assertNotNull(actual)
             println("UURandom.lettersOrNumbers: $actual")
         }
@@ -50,8 +54,8 @@ class UURandomTests
     {
         for (i in 0 until kLoops)
         {
-            val length = UURandom.uByte().toInt()
-            val actual = UURandom.word(length)
+            val length = uuRandomInt(255)
+            val actual = uuRandomWord(length)
             assertNotNull(actual)
             println("UURandom.word: $actual")
         }
@@ -62,7 +66,7 @@ class UURandomTests
     {
         for (i in 0 until kLoops)
         {
-            val actual = UURandom.words(10, 20)
+            val actual = uuRandomWords(10, 20)
             assertNotNull(actual)
             println("UURandom.words: $actual")
         }
