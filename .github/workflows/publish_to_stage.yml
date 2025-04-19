@@ -12,17 +12,17 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: 21
+          distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
+          java-version: ${{ vars.UU_JAVA_VERSION }}
       - name: Update Version
         run: ./scripts/update_version.sh
         env:
           BUILD_NUMBER: ${{github.run_number}}
       - name: Assemble Release
-        run: ./gradlew clean :library:assembleRelease
+        run: ./gradlew clean :library:test :library:assembleRelease
       - name: Publish to Maven Staging
         run: ./gradlew publishToSonatype --max-workers 1
         env:
