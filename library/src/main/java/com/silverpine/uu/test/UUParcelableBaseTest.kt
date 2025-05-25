@@ -2,6 +2,7 @@ package com.silverpine.uu.test
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.silverpine.uu.test.mocks.MockParcel
 
 abstract class UUParcelableBaseTest<T : Parcelable>
 {
@@ -17,7 +18,7 @@ abstract class UUParcelableBaseTest<T : Parcelable>
     {
         org.junit.Assert.assertNotNull(obj)
         org.junit.Assert.assertNotNull(creator)
-        val p = Parcel.obtain()
+        val p = MockParcel.obtain()
         obj.writeToParcel(p, 0)
         p.setDataPosition(0)
         val result = creator.createFromParcel(p)
