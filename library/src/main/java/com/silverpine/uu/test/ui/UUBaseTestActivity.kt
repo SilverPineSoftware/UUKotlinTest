@@ -28,7 +28,7 @@ open class UUBaseTestActivity : AppCompatActivity()
         permissionsCompletion(permissions)
     }
 
-    fun requestPermissions(permissions: Array<String>, completion: (Map<String,Boolean>)->Unit)
+    internal fun requestPermissions(permissions: Array<String>, completion: (Map<String,Boolean>)->Unit)
     {
         permissionsCompletion = completion
         permissionLauncher.launch(permissions)
@@ -165,6 +165,8 @@ fun <T: UUBaseTestActivity> ActivityScenarioRule<T>.uuRequestPermissions(permiss
             latch.countDown()
         }
     }
+
+    latch.await()
 
     return result
 }
