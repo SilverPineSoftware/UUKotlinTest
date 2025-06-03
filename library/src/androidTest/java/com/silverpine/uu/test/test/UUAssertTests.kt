@@ -27,4 +27,20 @@ class UUAssertTests
         // noinspection ConstantConditions
         Assert.assertFalse(UUAssert.areSameNullness(2L, null))
     }
+
+    @Test
+    fun test_unwrap()
+    {
+        var foo: Int? = 7
+        var bar = UUAssert.unwrap(foo)
+        Assert.assertEquals(7, bar)
+    }
+
+    @Test(expected = AssertionError::class)
+    fun test_unwrapNull()
+    {
+        // noinspection ConstantConditions
+        var bar = UUAssert.unwrap(null)
+        Assert.assertEquals(7, bar)
+    }
 }

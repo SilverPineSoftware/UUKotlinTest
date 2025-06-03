@@ -22,10 +22,11 @@ object UUAssert
             Assert.assertEquals(expected, liveData.value)
         }
     }
+
+    fun <T> unwrap(obj: T?, msg: String = ""): T
+    {
+        Assert.assertNotNull(msg, obj)
+        return obj!!
+    }
 }
 
-fun <T> Assert.uuUnwrap(obj: T?, msg: String = ""): T
-{
-    Assert.assertNotNull(msg, obj)
-    return obj!!
-}
