@@ -23,3 +23,9 @@ object UUAssert
         }
     }
 }
+
+fun <T> Assert.uuUnwrap(obj: T?, msg: String = ""): T
+{
+    Assert.assertNotNull(msg, obj)
+    return obj!!
+}
