@@ -7,12 +7,6 @@ plugins {
     id 'signing'
 }
 
-ext {
-    PUBLISH_ARTIFACT_ID = 'uu-test-ktx'
-    PUBLISH_DESCRIPTION = 'Useful Utilities Test'
-    SCM_MODULE_NAME = 'UUKotlinTest'
-}
-
 apply from: "${uu_build_common}/uu-build-library-common.gradle"
 
 dependencies {

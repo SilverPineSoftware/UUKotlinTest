@@ -1,12 +1,17 @@
 buildscript {
     ext.uu_namespace = 'com.silverpine.uu.test'
+    ext.uu_publish_artifact_id = 'uu-test-ktx'
+    ext.uu_publish_description = 'Useful Utilities Test'
+    ext.uu_scm_module_name = 'UUKotlinTest'
+
     ext.uu_min_sdk = 26
     ext.uu_target_sdk = 36
     ext.uu_gradle_version = '8.10.1'
     ext.uu_kotlin_version = '2.1.20'
     ext.uu_nexus_version = '2.0.0'
     ext.uu_java_version = JavaVersion.VERSION_17
-    ext.uu_build_common_version = '0.0.7'
+
+    ext.uu_build_common_version = '0.0.10'
     ext.uu_build_common_url = 'https://raw.githubusercontent.com/SilverPineSoftware/UUKotlinBuild'
     ext.uu_build_common = "${uu_build_common_url}/${uu_build_common_version}"
 }
