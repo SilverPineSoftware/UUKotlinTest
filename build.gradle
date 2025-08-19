@@ -6,7 +6,7 @@ buildscript {
     ext.uu_kotlin_version = '2.1.20'
     ext.uu_nexus_version = '2.0.0'
     ext.uu_java_version = JavaVersion.VERSION_17
-    ext.uu_build_common_version = '0.0.6'
+    ext.uu_build_common_version = '0.0.7'
     ext.uu_build_common_url = 'https://raw.githubusercontent.com/SilverPineSoftware/UUKotlinBuild'
     ext.uu_build_common = "${uu_build_common_url}/${uu_build_common_version}"
 }

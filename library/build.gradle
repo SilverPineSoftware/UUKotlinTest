@@ -13,7 +13,7 @@ ext {
     SCM_MODULE_NAME = 'UUKotlinTest'
 }
 
-apply from: "${uu_build_common}/uu-build-common.gradle"
+apply from: "${uu_build_common}/uu-build-library-common.gradle"
 
 dependencies {
 
