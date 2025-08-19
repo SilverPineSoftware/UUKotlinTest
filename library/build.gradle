@@ -13,7 +13,7 @@ ext {
     SCM_MODULE_NAME = 'UUKotlinTest'
 }
 
-apply from: "../uu-build-common.gradle"
+apply from: 'https://raw.githubusercontent.com/SilverPineSoftware/UUKotlinBuild/0.0.3/uu-build-common.gradle'
 
 android {
     compileSdkVersion target_sdk

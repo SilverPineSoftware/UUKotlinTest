@@ -14,4 +14,4 @@ plugins {
     id 'io.github.gradle-nexus.publish-plugin' version "${nexus_version}" apply true
 }
 
-apply from: "./publish-common.gradle"
+apply from: 'https://raw.githubusercontent.com/SilverPineSoftware/UUKotlinBuild/0.0.3/uu-publish-common.gradle'
