@@ -51,6 +51,8 @@ open class UUBaseTestActivity : AppCompatActivity()
             ConstraintLayout.LayoutParams.MATCH_PARENT
         )
 
+        rootLayout.fitsSystemWindows = true
+
         testNameLabel = AppCompatTextView(this)
         testNameLabel.id = testNameLabelId
         testNameLabel.setTextColor(Color.argb(255, 0, 0, 0))
