@@ -3,10 +3,12 @@ package com.silverpine.uu.test.instrumented
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertTrue
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 object UUTestPermissions
 {
     /**
@@ -23,18 +25,8 @@ object UUTestPermissions
 
         return try
         {
-            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            {
-                @Suppress("DEPRECATION")
-                val flags = PackageManager.GET_PERMISSIONS.toLong()
-                pm.getPackageInfo(pkg, PackageManager.PackageInfoFlags.of(flags))
-            }
-            else
-            {
-                @Suppress("DEPRECATION")
-                pm.getPackageInfo(pkg, PackageManager.GET_PERMISSIONS)
-            }
-
+            val flags = PackageManager.GET_PERMISSIONS.toLong()
+            val packageInfo = pm.getPackageInfo(pkg, PackageManager.PackageInfoFlags.of(flags))
             packageInfo.requestedPermissions?.contains(permission) == true
         }
         catch (e: Exception)
@@ -67,16 +59,13 @@ object UUTestPermissions
 
     fun grant(permission: String)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-        {
-            // Fail here if not in the manifest
-            assertTrue("Permission $permission is not declared in the manifest", isPermissionDeclaredInManifest(permission))
+        // Fail here if not in the manifest
+        assertTrue("Permission $permission is not declared in the manifest", isPermissionDeclaredInManifest(permission))
 
-            val ctx = InstrumentationRegistry.getInstrumentation().targetContext
-            val pkg = ctx.packageName
-            val ua = InstrumentationRegistry.getInstrumentation().uiAutomation
-            ua.grantRuntimePermission(pkg, permission)
-        }
+        val ctx = InstrumentationRegistry.getInstrumentation().targetContext
+        val pkg = ctx.packageName
+        val ua = InstrumentationRegistry.getInstrumentation().uiAutomation
+        ua.grantRuntimePermission(pkg, permission)
     }
 
     fun grantBlePermissions()

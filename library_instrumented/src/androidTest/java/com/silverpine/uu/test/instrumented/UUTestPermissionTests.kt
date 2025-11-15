@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -19,6 +20,7 @@ class UUTestPermissionTests
     val rule = ActivityScenarioRule(UUTestActivity::class.java)
 
     @Test
+    @SdkSuppress(minSdkVersion = 33)
     fun testGrantPermissions() = runBlocking()
     {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -50,6 +52,7 @@ class UUTestPermissionTests
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 33)
     fun testGrantPermissions_notInManifest() = runBlocking()
     {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
