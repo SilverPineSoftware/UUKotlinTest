@@ -86,3 +86,4 @@ lint/tmp/
 /.idea/misc.xml
 .DS_Store
 .idea
+/.kotlin

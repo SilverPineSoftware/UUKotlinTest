@@ -2,6 +2,7 @@ package com.silverpine.uu.test.instrumented
 
 import android.Manifest
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +32,7 @@ class UUTestActivityTests
         Thread.sleep(2000)
     }
 
+    @UUInteractionRequired
     @Test
     fun testRequestSomePermissions() = runBlocking()
     {
