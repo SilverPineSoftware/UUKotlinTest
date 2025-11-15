@@ -31,6 +31,6 @@ jobs:
         run: |
           CONFIG=$(echo "${{ github.event.inputs.configuration }}" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')
           ./gradlew \
-          :library_instrumented:connectedUu${CONFIG}DebugAndroidTest \
+          :library_instrumented:uu${CONFIG}DebugAndroidTest \
           -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired \
           --stacktrace
