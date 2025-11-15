@@ -1,0 +1,67 @@
+name: Android Instrumented Tests (Emulator Runner)
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Test configuration to run'
+        required: true
+        type: choice
+        options:
+          - quick
+          - ci
+          - complete
+        default: 'quick'
+
+jobs:
+  setup-matrix:
+    name: Setup Test Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          case "${{ github.event.inputs.configuration }}" in
+            quick)
+              MATRIX='{"include":[{"api-level":33,"profile":"Pixel 7"}]}'
+              ;;
+            ci)
+              MATRIX='{"include":[{"api-level":27,"profile":"Pixel"},{"api-level":30,"profile":"Pixel 4"},{"api-level":33,"profile":"Pixel 7"},{"api-level":35,"profile":"Pixel 9"}]}'
+              ;;
+            complete)
+              MATRIX='{"include":[{"api-level":27,"profile":"Pixel"},{"api-level":28,"profile":"Pixel 2"},{"api-level":29,"profile":"Pixel 3"},{"api-level":30,"profile":"Pixel 4"},{"api-level":31,"profile":"Pixel 5"},{"api-level":32,"profile":"Pixel 6"},{"api-level":33,"profile":"Pixel 7"},{"api-level":34,"profile":"Pixel 8"},{"api-level":35,"profile":"Pixel 9"},{"api-level":30,"profile":"Nexus One"}]}'
+              ;;
+          esac
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+
+  instrumented-tests:
+    name: Run Android Instrumented Tests (${{ github.event.inputs.configuration }})
+    needs: setup-matrix
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
+          java-version: ${{ vars.UU_JAVA_VERSION }}
+
+      - name: Run Instrumented Tests (API ${{ matrix.api-level }})
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          profile: ${{ matrix.profile }}
+          target: default
+          script: |
+            ./gradlew \
+            :library_instrumented:connectedDebugAndroidTest \
+            -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired \
+            --stacktrace
+
