@@ -1,7 +1,4 @@
 buildscript {
-    ext.uu_namespace = 'com.silverpine.uu.test'
-    ext.uu_publish_artifact_id = 'uu-test-ktx'
-    ext.uu_publish_description = 'Useful Utilities Test'
     ext.uu_scm_module_name = 'UUKotlinTest'
 
     ext.uu_min_sdk = 26

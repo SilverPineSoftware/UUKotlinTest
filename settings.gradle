@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "UUKotlinTest"
 include ':library'
+include ':library_instrumented'
