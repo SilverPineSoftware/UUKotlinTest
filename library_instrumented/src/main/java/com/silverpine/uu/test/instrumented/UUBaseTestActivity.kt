@@ -1,4 +1,4 @@
-package com.silverpine.uu.test.ui
+package com.silverpine.uu.test.instrumented
 
 import android.annotation.SuppressLint
 import android.graphics.Color

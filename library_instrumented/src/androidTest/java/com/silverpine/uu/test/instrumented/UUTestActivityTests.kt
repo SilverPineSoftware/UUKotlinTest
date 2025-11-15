@@ -1,11 +1,7 @@
-package com.silverpine.uu.test.test
+package com.silverpine.uu.test.instrumented
 
 import android.Manifest
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.silverpine.uu.test.ui.uuAppendOutputLine
-import com.silverpine.uu.test.ui.uuRequestPermissions
-import com.silverpine.uu.test.ui.uuSetTestName
-import com.silverpine.uu.test.ui.uuSetTitle
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test

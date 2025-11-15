@@ -11,11 +11,12 @@
         android:usesPermissionFlags="neverForLocation"
         tools:targetApi="s" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.silverpine.uu.test.test.UUTestActivity"
+            android:name="com.silverpine.uu.test.instrumented.UUTestActivity"
             android:theme="@style/Theme.AppCompat"
             android:label="UU Test"
             android:exported="true">
