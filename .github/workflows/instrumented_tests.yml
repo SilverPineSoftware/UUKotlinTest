@@ -1,0 +1,39 @@
+name: Android Instrumented Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Test configuration to run'
+        required: true
+        type: choice
+        options:
+          - quick
+          - ci
+          - complete
+        default: 'quick'
+
+jobs:
+  instrumented-tests:
+    name: Run Android Instrumented Tests (${{ github.event.inputs.configuration }})
+    runs-on: macos-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
+          java-version: ${{ vars.UU_JAVA_VERSION }}
+          
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Run Instrumented Tests (${{ github.event.inputs.configuration }})
+        run: |
+          CONFIG=$(echo "${{ github.event.inputs.configuration }}" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')
+          ./gradlew \
+          :library_instrumented:uu${CONFIG}GroupDebugAndroidTest \
+          -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired \
+          --stacktrace
