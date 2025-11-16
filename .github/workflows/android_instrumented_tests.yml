@@ -26,11 +26,16 @@ jobs:
         with:
           distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
           java-version: ${{ vars.UU_JAVA_VERSION }}
+          
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          accept-android-sdk-licenses: 'yes' 
 
       - name: Run Instrumented Tests (${{ github.event.inputs.configuration }})
         run: |
           CONFIG=$(echo "${{ github.event.inputs.configuration }}" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')
           ./gradlew \
-          :library_instrumented:uu${CONFIG}DebugAndroidTest \
+          :library_instrumented:uu${CONFIG}GroupDebugAndroidTest \
           -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired \
           --stacktrace
