@@ -25,8 +25,10 @@ jobs:
         id: get-version
         run: |
           VERSION=$(grep "^version=" gradle.properties | cut -d'=' -f2)
-          echo "version=$VERSION.${{github.run_number}}" >> $GITHUB_OUTPUT
-          echo "Current version: $VERSION"
+          BUILD=${{github.run_number}}
+          FULL_VERSION=$VERSION.$BUILD
+          echo "version=$FULL_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $FULL_VERSION"
 
       - name: Setup Java
         uses: actions/setup-java@v4
