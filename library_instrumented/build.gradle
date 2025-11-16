@@ -12,6 +12,7 @@ ext.uu_publish_artifact_id = 'uu-test-instrumented-ktx'
 ext.uu_publish_description = 'Useful Utilities Instrumented Test'
 
 apply from: "${uu_build_common}/uu-build-library-common.gradle"
+apply from: "${uu_build_common}/uu-build-test-common.gradle"
 
 dependencies {
 
