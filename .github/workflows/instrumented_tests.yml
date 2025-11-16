@@ -8,11 +8,22 @@ on:
         required: true
         type: choice
         options:
-          - quick
-          - ci
-          - complete
-        default: 'quick'
-
+          - quickGroup
+          - ciGroup
+          - completeGroup
+          - pixel1api27
+          - pixel2api28
+          - pixel3api29
+          - pixel4api30
+          - pixel5api31
+          - pixel6api32
+          - pixel7api33
+          - pixel8api34
+          - pixel9api35
+          - pixel10api36
+          - nexus1api30
+        default: 'quickGroup'
+        
 jobs:
   instrumented-tests:
     name: Run Android Instrumented Tests (${{ github.event.inputs.configuration }})
@@ -49,7 +60,7 @@ jobs:
         run: |
           CONFIG=$(echo "${{ github.event.inputs.configuration }}" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')
           ./gradlew \
-          :library_instrumented:uu${CONFIG}GroupDebugAndroidTest \
+          :library_instrumented:${{ github.event.inputs.configuration }}DebugAndroidTest \
           -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired
           
       - name: Upload Test Results
