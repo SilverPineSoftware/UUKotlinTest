@@ -28,9 +28,7 @@ jobs:
           java-version: ${{ vars.UU_JAVA_VERSION }}
           
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          accept-android-sdk-licenses: 'yes'
+        uses: android-actions/setup-android@v3
 
       - name: Cache Android System Images
         uses: actions/cache@v4
