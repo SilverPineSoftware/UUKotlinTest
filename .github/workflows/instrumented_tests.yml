@@ -36,4 +36,5 @@ jobs:
           ./gradlew \
           :library_instrumented:uu${CONFIG}GroupDebugAndroidTest \
           -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired \
-          --stacktrace
+          -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect 
+
