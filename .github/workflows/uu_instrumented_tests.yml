@@ -30,4 +30,4 @@ jobs:
     with:
       configuration: ${{ inputs.configuration }}
       runner: 'ubuntu-latest'
-      module_path: ':library_instrumented'
+      module_path: 'library_instrumented'
