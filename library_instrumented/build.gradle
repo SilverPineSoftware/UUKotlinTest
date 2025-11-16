@@ -12,7 +12,7 @@ ext.uu_publish_artifact_id = 'uu-test-instrumented-ktx'
 ext.uu_publish_description = 'Useful Utilities Instrumented Test'
 
 apply from: "${uu_build_common}/uu-build-library-common.gradle"
-apply from: "${uu_build_common}/uu-build-test-common.gradle"
+//apply from: "${uu_build_common}/uu-build-test-common.gradle"
 
 dependencies {
 
@@ -25,3 +25,100 @@ dependencies {
 }
 
 
+
+android {
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+
+        managedDevices {
+            localDevices {
+                pixel1api27 {
+                    device = "Pixel"
+                    apiLevel = 27
+                    systemImageSource = "aosp|x86_64"
+                }
+                pixel2api28 {
+                    device = "Pixel 2"
+                    apiLevel = 28
+                    systemImageSource = "aosp|x86_64"
+                }
+                pixel3api29 {
+                    device = "Pixel 3"
+                    apiLevel = 29
+                    systemImageSource = "aosp|x86_64"
+                }
+                pixel4api30 {
+                    device = "Pixel 4"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                pixel5api31 {
+                    device = "Pixel 5"
+                    apiLevel = 31
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                pixel6api32 {
+                    device = "Pixel 6"
+                    apiLevel = 32
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                pixel7api33 {
+                    device = "Pixel 7"
+                    apiLevel = 33
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                pixel8api34 {
+                    device = "Pixel 8"
+                    apiLevel = 34
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                pixel9api35 {
+                    device = "Pixel 9"
+                    apiLevel = 35
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                pixel10api36 {
+                    device = "Pixel 10"
+                    apiLevel = 36
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+                nexus1api30 {
+                    device = "Nexus One"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd|x86_64"
+                }
+            }
+
+            groups {
+                // Middle of the road SDK for quick checks
+                uuQuick {
+                    targetDevices.add(localDevices.pixel7api33)
+                }
+
+                // Small range of tests for CI builds
+                uuCi {
+                    targetDevices.add(localDevices.pixel1api27)
+                    targetDevices.add(localDevices.pixel4api30)
+                    targetDevices.add(localDevices.pixel7api33)
+                    targetDevices.add(localDevices.pixel9api35)
+                }
+
+                // Complete list of devices for full testing
+                uuComplete {
+                    targetDevices.add(localDevices.pixel1api27)
+                    targetDevices.add(localDevices.pixel2api28)
+                    targetDevices.add(localDevices.pixel3api29)
+                    targetDevices.add(localDevices.pixel4api30)
+                    targetDevices.add(localDevices.pixel5api31)
+                    targetDevices.add(localDevices.pixel6api32)
+                    targetDevices.add(localDevices.pixel7api33)
+                    targetDevices.add(localDevices.pixel8api34)
+                    targetDevices.add(localDevices.pixel9api35)
+                    targetDevices.add(localDevices.nexus1api30)
+                }
+            }
+        }
+    }
+}
