@@ -61,7 +61,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Run Instrumented Tests (API ${{ github.event.inputs.api_level }}, Image ${{ github.event.inputs.system_image_type }})
+      - name: Run Instrumented Tests (API ${{ github.event.inputs.api_level }}, ${{ github.event.inputs.system_image_type }}, ${{ github.event.inputs.system_arch }})
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ github.event.inputs.api_level }}
