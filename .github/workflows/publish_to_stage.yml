@@ -19,6 +19,7 @@ jobs:
       module_path: 'library_instrumented'
 
   library-snapshot:
+    needs: [run-tests]
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_publish_snapshot.yml@main
     with:
       module_path: 'library'
@@ -33,7 +34,7 @@ jobs:
       SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
       
   library-instrumented-snapshot:
-    needs: [library-snapshot]
+    needs: [library-snapshot, run-instrumented-tests]
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_publish_snapshot.yml@main
     with:
       module_path: 'library_instrumented'
