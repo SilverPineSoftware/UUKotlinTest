@@ -49,19 +49,39 @@ jobs:
       - name: Pre-install x86_64 System Images
         if: steps.cache-system-images.outputs.cache-hit != 'true'
         run: |
-          # Install x86_64 system images for all API levels used in managed devices
-          # API 27-29 use "aosp" (default package), API 30+ use "aosp-atd"
-          # Try aosp_atd first (most common for aosp-atd systemImageSource)
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-            "system-images;android-27;default;x86_64" \
-            "system-images;android-28;default;x86_64" \
-            "system-images;android-29;default;x86_64" \
-            "system-images;android-30;aosp_atd;x86_64" \
-            "system-images;android-31;aosp_atd;x86_64" \
-            "system-images;android-32;aosp_atd;x86_64" \
-            "system-images;android-33;aosp_atd;x86_64" \
-            "system-images;android-34;aosp_atd;x86_64" \
-            "system-images;android-35;aosp_atd;x86_64"
+          # Install x86_64 system images based on selected configuration
+          # API 27-29 use "aosp" (default package), API 30+ use "aosp-atd" (aosp_atd package)
+          case "${{ github.event.inputs.configuration }}" in
+            quick)
+              # Quick: API 33 only
+              echo "Installing system images for quick configuration (API 33)"
+              $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+                "system-images;android-33;aosp_atd;x86_64"
+              ;;
+            ci)
+              # CI: API 27, 30, 33, 35
+              echo "Installing system images for ci configuration (API 27, 30, 33, 35)"
+              $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+                "system-images;android-27;default;x86_64" \
+                "system-images;android-30;aosp_atd;x86_64" \
+                "system-images;android-33;aosp_atd;x86_64" \
+                "system-images;android-35;aosp_atd;x86_64"
+              ;;
+            complete)
+              # Complete: API 27-35
+              echo "Installing system images for complete configuration (API 27-35)"
+              $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+                "system-images;android-27;default;x86_64" \
+                "system-images;android-28;default;x86_64" \
+                "system-images;android-29;default;x86_64" \
+                "system-images;android-30;aosp_atd;x86_64" \
+                "system-images;android-31;aosp_atd;x86_64" \
+                "system-images;android-32;aosp_atd;x86_64" \
+                "system-images;android-33;aosp_atd;x86_64" \
+                "system-images;android-34;aosp_atd;x86_64" \
+                "system-images;android-35;aosp_atd;x86_64"
+              ;;
+          esac
 
       - name: Run Instrumented Tests (${{ github.event.inputs.configuration }})
         run: |
