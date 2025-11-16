@@ -1,4 +1,4 @@
-name: Instrumented Tests
+name: Instrumented Tests (Manual)
 
 on:
   workflow_dispatch:
