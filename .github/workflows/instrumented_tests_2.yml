@@ -21,11 +21,21 @@ on:
           - 33
           - 35
         default: '33'
+      target:
+        description: 'System Image Target'
+        required: true
+        type: choice
+        options:
+          - default
+          - aosp_atd
+          - google_apis
+          - google_atd
+        default: 'aosp_atd'
         
         
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -46,13 +56,14 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ github.event.inputs.api_level }}
+          target: ${{ github.event.inputs.target }}
           script: ./gradlew connectedCheck
           
       - name: Run Instrumented Tests (API ${{ matrix.api-level }})
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ github.event.inputs.api_level }}
-          arch: x86_64
+          target: ${{ github.event.inputs.target }}
           script: |
             ./gradlew \
             :library_instrumented:connectedDebugAndroidTest \
