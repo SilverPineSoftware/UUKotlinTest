@@ -68,6 +68,13 @@ jobs:
           target: ${{ github.event.inputs.system_image_type }}
           arch: ${{ github.event.inputs.system_arch }}
           script: ./gradlew :library_instrumented:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired
-            
+          
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.event.inputs.api_level }}-${{ github.event.inputs.system_image_type }}-${{ github.event.inputs.system_arch }}
+          path: library_instrumented/build/reports/androidTests
+          retention-days: 14
+        
         
         
