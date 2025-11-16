@@ -1,0 +1,33 @@
+name: Instrumented Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Test configuration to run'
+        required: true
+        type: choice
+        options:
+          - quickGroup
+          - ciGroup
+          - completeGroup
+          - pixel1api27
+          - pixel2api28
+          - pixel3api29
+          - pixel4api30
+          - pixel5api31
+          - pixel6api32
+          - pixel7api33
+          - pixel8api34
+          - pixel9api35
+          - pixel10api36
+          - nexus1api30
+        default: 'quickGroup'
+
+jobs:
+  call-reusable-workflow:
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_instrumented_tests.yml@main
+    with:
+      configuration: ${{ inputs.runner }}
+      runner: 'ubuntu-latest'
+      module_path: ':library_instrumented'
