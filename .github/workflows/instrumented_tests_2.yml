@@ -57,6 +57,8 @@ jobs:
         with:
           api-level: ${{ github.event.inputs.api_level }}
           target: ${{ github.event.inputs.system_image_type }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: ./gradlew connectedCheck
           
       - name: Run Instrumented Tests (API ${{ github.event.inputs.api_level }}, Image ${{ github.event.inputs.system_image_type }})
@@ -64,6 +66,8 @@ jobs:
         with:
           api-level: ${{ github.event.inputs.api_level }}
           target: ${{ github.event.inputs.system_image_type }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: |
             ./gradlew \
             :library_instrumented:connectedDebugAndroidTest \
