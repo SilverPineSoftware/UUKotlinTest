@@ -30,7 +30,32 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
-          accept-android-sdk-licenses: 'yes' 
+          accept-android-sdk-licenses: 'yes'
+
+      - name: Cache Android System Images
+        uses: actions/cache@v4
+        id: cache-system-images
+        with:
+          path: ${{ env.ANDROID_HOME }}/system-images
+          key: ${{ runner.os }}-android-system-images-x86_64-v1
+          restore-keys: |
+            ${{ runner.os }}-android-system-images-x86_64-
+
+      - name: Pre-install x86_64 System Images
+        if: steps.cache-system-images.outputs.cache-hit != 'true'
+        run: |
+          # Install x86_64 system images for all API levels used in managed devices
+          # API 27-29 use "aosp" (default package), API 30+ use "aosp-atd" (google_apis_atd package)
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+            "system-images;android-27;default;x86_64" \
+            "system-images;android-28;default;x86_64" \
+            "system-images;android-29;default;x86_64" \
+            "system-images;android-30;google_apis_atd;x86_64" \
+            "system-images;android-31;google_apis_atd;x86_64" \
+            "system-images;android-32;google_apis_atd;x86_64" \
+            "system-images;android-33;google_apis_atd;x86_64" \
+            "system-images;android-34;google_apis_atd;x86_64" \
+            "system-images;android-35;google_apis_atd;x86_64"
 
       - name: Run Instrumented Tests (${{ github.event.inputs.configuration }})
         run: |
