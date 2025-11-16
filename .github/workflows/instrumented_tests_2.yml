@@ -61,14 +61,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Check Emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ github.event.inputs.api_level }}
-          target: ${{ github.event.inputs.system_image_type }}
-          arch: ${{ github.event.inputs.system_arch }}
-          script: ./gradlew connectedCheck
-          
       - name: Run Instrumented Tests (API ${{ github.event.inputs.api_level }}, Image ${{ github.event.inputs.system_image_type }})
         uses: reactivecircus/android-emulator-runner@v2
         with:
