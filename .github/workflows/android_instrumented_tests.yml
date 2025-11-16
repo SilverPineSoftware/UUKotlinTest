@@ -35,9 +35,9 @@ jobs:
         id: cache-system-images
         with:
           path: ${{ env.ANDROID_HOME }}/system-images
-          key: ${{ runner.os }}-android-system-images-x86_64-v1
+          key: ${{ runner.os }}-android-system-images-x86_64-only-v2
           restore-keys: |
-            ${{ runner.os }}-android-system-images-x86_64-
+            ${{ runner.os }}-android-system-images-x86_64-only-
 
       - name: List Available System Images (Debug)
         if: steps.cache-system-images.outputs.cache-hit != 'true'
@@ -45,6 +45,13 @@ jobs:
           echo "Listing available packages:"
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --list
           echo ""
+
+      - name: Remove ARM64 System Images
+        run: |
+          # Remove any ARM64 system images to force x86_64 usage
+          echo "Removing ARM64 system images to force x86_64..."
+          find $ANDROID_HOME/system-images -type d -name "*arm64*" -exec rm -rf {} + 2>/dev/null || true
+          find $ANDROID_HOME/system-images -type d -name "*armeabi*" -exec rm -rf {} + 2>/dev/null || true
 
       - name: Pre-install x86_64 System Images
         if: steps.cache-system-images.outputs.cache-hit != 'true'
@@ -83,7 +90,18 @@ jobs:
               ;;
           esac
 
+      - name: Verify x86_64 System Images
+        run: |
+          echo "Verifying installed system images (should only show x86_64):"
+          find $ANDROID_HOME/system-images -type d -name "x86_64" | head -5 || echo "No x86_64 images found"
+          echo ""
+          echo "Checking for ARM64 images (should be empty):"
+          find $ANDROID_HOME/system-images -type d -name "*arm64*" | head -5 || echo "No ARM64 images found (good!)"
+
       - name: Run Instrumented Tests (${{ github.event.inputs.configuration }})
+        env:
+          ANDROID_EMULATOR_FORCE_32BIT: "false"
+          ANDROID_ABI: "x86_64"
         run: |
           CONFIG=$(echo "${{ github.event.inputs.configuration }}" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')
           ./gradlew \
