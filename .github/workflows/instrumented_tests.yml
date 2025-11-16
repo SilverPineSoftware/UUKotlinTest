@@ -20,6 +20,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+        
+      - name: Read version from gradle.properties
+        id: get-version
+        run: |
+          VERSION=$(grep "^version=" gradle.properties | cut -d'=' -f2)
+          echo "version=$VERSION.${{github.run_number}}" >> $GITHUB_OUTPUT
+          echo "Current version: $VERSION"
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -42,4 +49,10 @@ jobs:
           ./gradlew \
           :library_instrumented:uu${CONFIG}GroupDebugAndroidTest \
           -Pandroid.testInstrumentationRunnerArguments.notAnnotation=com.silverpine.uu.test.instrumented.annotations.UUInteractionRequired
+          
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.event.inputs.configuration }}-${{ steps.get-version.outputs.version }}
+          path: library_instrumented/build/reports/androidTests
 
