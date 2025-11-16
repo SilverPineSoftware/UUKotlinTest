@@ -23,11 +23,19 @@ on:
           - pixel10api36
           - nexus1api30
         default: 'quickGroup'
+      runner:
+        description: 'Runner environment'
+        required: true
+        type: choice
+        options:
+          - ubuntu-latest
+          - macos-latest
+        default: 'ubuntu-latest'
         
 jobs:
   instrumented-tests:
     name: Run Android Instrumented Tests (${{ github.event.inputs.configuration }})
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event.inputs.runner }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -49,8 +57,19 @@ jobs:
           
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        
+      - name: Cache Android System Images
+        uses: actions/cache@v4
+        id: cache-system-images
+        with:
+          path: ${{ env.ANDROID_HOME }}/system-images
+          key: ${{ github.event.inputs.runner }}-android-system-images-v1
+          restore-keys: |
+            ${{ github.event.inputs.runner }}-android-system-images
+
 
       - name: Enable KVM for Hardware Acceleration
+        if: github.event.inputs.runner == 'ubuntu-latest'
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
