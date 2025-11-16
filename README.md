@@ -1,5 +1,5 @@
 # UUKotlinTest
-Useful Unit Test Helpers in Kotlin
+Useful Utilities for Testing!
 
 ## Libraries
 
