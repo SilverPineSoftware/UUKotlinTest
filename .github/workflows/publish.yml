@@ -48,70 +48,7 @@ jobs:
        
   create-release:
     needs: [run-tests, run-instrumented-tests]
-#    needs: [publish-library, publish-library-instrumented]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  upload-release-artifacts:
-    needs: [run-tests, run-instrumented-tests, create-release]
-#    needs: [run-tests, run-instrumented-tests, publish-library, create-release]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check gh CLI
-        run: gh --version
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        continue-on-error: true
-      
-      - name: Upload test results to release
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-
-          # Find and zip unit test result artifacts
-          for artifact_dir in */; do
-            if [[ "$artifact_dir" == *test-results* ]] && [[ "$artifact_dir" != *instrumented* ]]; then
-              if [ -d "$artifact_dir" ]; then
-                echo "Found unit test artifact directory: $artifact_dir"
-                zip -r "library-test-results-${{ github.ref_name }}.zip" "$artifact_dir"
-                gh release upload "${{ github.ref_name }}" "library-test-results-${{ github.ref_name }}.zip" --clobber
-                UPLOADED_UNIT=true
-                break
-              fi
-            fi
-          done
-          
-          # Find and zip instrumented test result artifacts
-          for artifact_dir in */; do
-            if [[ "$artifact_dir" == *instrumented-test-results* ]]; then
-              if [ -d "$artifact_dir" ]; then
-                echo "Found instrumented test artifact directory: $artifact_dir"
-                zip -r "library-instrumented-test-results-${{ github.ref_name }}.zip" "$artifact_dir"
-                gh release upload "${{ github.ref_name }}" "library-instrumented-test-results-${{ github.ref_name }}.zip" --clobber
-                UPLOADED_INSTRUMENTED=true
-                break
-              fi
-            fi
-          done
-
-      
-      
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_create_release.yml@main
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
