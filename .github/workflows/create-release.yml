@@ -1,5 +1,7 @@
 name: Create Release Tag
-
+permissions:
+  contents: write
+  
 on:
   workflow_dispatch:
     inputs:
@@ -8,70 +10,11 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
-
 jobs:
   create-tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.RELEASE_PAT }}
-          fetch-depth: 0  # Fetch all history for tags
-
-      - name: Validate version format
-        run: |
-          if [[ ! "${{ inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Error: Version must be in format x.y.z (e.g., 1.0.0)"
-            exit 1
-          fi
-
-      - name: Check if tag already exists
-        id: check-tag
-        run: |
-          if git rev-parse "${{ inputs.version }}" >/dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Error: Tag ${{ inputs.version }} already exists"
-            exit 1
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Update gradle.properties version
-        run: |
-          VERSION="${{ inputs.version }}"
-          GRADLE_PROPERTIES="gradle.properties"
-          
-          # Update version in gradle.properties
-          sed -i "s/^version=.*/version=${VERSION}/" "$GRADLE_PROPERTIES"
-          
-          # Verify the change
-          echo "Updated gradle.properties:"
-          grep "^version=" "$GRADLE_PROPERTIES"
-
-      - name: Commit version update
-        run: |
-          git add gradle.properties
-          git commit -m "Bump version to ${{ inputs.version }}"
-          
-      - name: Create and push tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
-        run: |
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git tag -a "${{ inputs.version }}" -m "Release ${{ inputs.version }}"
-          git push origin HEAD
-          git push origin "${{ inputs.version }}"
-          
-      - name: Summary
-        run: |
-          echo "✅ Successfully created tag ${{ inputs.version }}"
-          echo "📦 The publish workflow will now be triggered automatically"
-
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_create_release_tag.yml@main
+    with:
+      version: ${{ inputs.version }}
+    secrets:
+      RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
+      
