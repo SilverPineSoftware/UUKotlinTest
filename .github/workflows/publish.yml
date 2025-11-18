@@ -50,5 +50,5 @@ jobs:
     needs: [run-tests, run-instrumented-tests]
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_create_release.yml@main
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      UU_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
