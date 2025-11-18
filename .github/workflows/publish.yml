@@ -70,8 +70,13 @@ jobs:
     permissions:
       contents: write
     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Check gh CLI
         run: gh --version
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         continue-on-error: true
