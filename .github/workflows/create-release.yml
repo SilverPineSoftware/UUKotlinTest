@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PAT }}
           fetch-depth: 0  # Fetch all history for tags
 
       - name: Validate version format
@@ -62,7 +62,10 @@ jobs:
           git commit -m "Bump version to ${{ inputs.version }}"
           
       - name: Create and push tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: |
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git tag -a "${{ inputs.version }}" -m "Release ${{ inputs.version }}"
           git push origin HEAD
           git push origin "${{ inputs.version }}"
