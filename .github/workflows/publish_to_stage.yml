@@ -12,57 +12,43 @@ concurrency:
   
 jobs:
 
-  publish-snapshot:
-    name: Publish Snapshot
-    runs-on: macos-latest
-    steps:
-      - name: Run Tests
-        uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-tests@main
-        with:
-          build_number: ${{ github.run_number }}
-          java_distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
-          java_version: ${{ vars.UU_JAVA_VERSION }}
-          
-      - name: Run Instrumented Tests
-        uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-instrumented-tests@main
-        with:
-          configuration: ${{ inputs.configuration }}
-          module_path: 'library_instrumented'
-          build_number: ${{ github.run_number }}
-          java_distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
-          java_version: ${{ vars.UU_JAVA_VERSION }}
-          
-      - name: Publish Library Snapshot
-        uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-publish-snapshot@main
-        with:
-          build_number: ${{ github.run_number }}
-          java_distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
-          java_version: ${{ vars.UU_JAVA_VERSION }}
-          maven_central_nexus_url: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
-          maven_central_snapshot_url: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
-          ossrh_username: ${{ secrets.OSSRH_USERNAME }}
-          ossrh_password: ${{ secrets.OSSRH_PASSWORD }}
-          signing_key_id: ${{ secrets.SIGNING_KEY_ID }}
-          signing_password: ${{ secrets.SIGNING_PASSWORD }}
-          signing_key: ${{ secrets.SIGNING_KEY }}
-          sonatype_staging_profile_id: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
-          
-      - name: Publish Library Instrumented Snapshot
-        uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-publish-snapshot@main
-        with:
-          module_path: 'library_instrumented'
-          build_number: ${{ github.run_number }}
-          java_distribution: ${{ vars.UU_JAVA_DISTRIBUTION }}
-          java_version: ${{ vars.UU_JAVA_VERSION }}
-          maven_central_nexus_url: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
-          maven_central_snapshot_url: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
-          ossrh_username: ${{ secrets.OSSRH_USERNAME }}
-          ossrh_password: ${{ secrets.OSSRH_PASSWORD }}
-          signing_key_id: ${{ secrets.SIGNING_KEY_ID }}
-          signing_password: ${{ secrets.SIGNING_PASSWORD }}
-          signing_key: ${{ secrets.SIGNING_KEY }}
-          sonatype_staging_profile_id: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
-          
-          
-          
+  run-tests:
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_tests.yml@main
+    with:
+      module_path: 'library'
+    
+  run-instrumented-tests:
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_instrumented_tests.yml@main
+    with:
+      module_path: 'library_instrumented'
+
+  publish-library-snapshot:
+    needs: [run-tests]
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_library_publish_snapshot.yml@main
+    with:
+      module_path: 'library'
+    secrets:
+      MAVEN_CENTRAL_NEXUS_URL: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
+      MAVEN_CENTRAL_SNAPSHOT_URL: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
+      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
+      
+  publish-library-instrumented-snapshot:
+    needs: [run-instrumented-tests]
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_library_publish_snapshot.yml@main
+    with:
+      module_path: 'library_instrumented'
+    secrets:
+      MAVEN_CENTRAL_NEXUS_URL: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
+      MAVEN_CENTRAL_SNAPSHOT_URL: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
+      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
       
