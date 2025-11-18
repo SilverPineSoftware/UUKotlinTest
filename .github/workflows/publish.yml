@@ -1,5 +1,6 @@
 name: Publish
-permissions: read-all
+permissions:
+  contents: write
 
 on:
   create:
