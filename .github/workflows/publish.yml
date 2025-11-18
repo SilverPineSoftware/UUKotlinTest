@@ -70,6 +70,8 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Check gh CLI
+        run: gh --version
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         continue-on-error: true
@@ -77,7 +79,7 @@ jobs:
       - name: Upload test results to release
         if: always()
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
 
           # Find and zip unit test result artifacts
