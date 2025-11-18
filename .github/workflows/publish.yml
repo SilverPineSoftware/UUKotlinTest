@@ -64,7 +64,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-release-artifacts:
-    needs: [run-tests, run-instrumented-tests, publish-library, create-release]
+    needs: [run-tests, run-instrumented-tests, create-release]
+#    needs: [run-tests, run-instrumented-tests, publish-library, create-release]
     runs-on: ubuntu-latest
     permissions:
       contents: write
