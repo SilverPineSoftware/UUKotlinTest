@@ -52,4 +52,17 @@ jobs:
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_create_release.yml@main
     secrets:
       UU_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  prepare-next-version:
+    needs: [create-release]
+    runs-on: ubuntu-latest
+    if: always()
+    permissions:
+      contents: write
+    steps:
+      - name: Prepare Next Version
+        uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-prepare-next-version@main
+        continue-on-error: true
+        with:
+          release_pat: ${{ secrets.RELEASE_PAT }}
     
