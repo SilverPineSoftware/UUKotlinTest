@@ -6,8 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g., 1.0.0)'
-        required: true
+        # If not specified, the version from gradle.properties will be used
+        description: 'Release version (e.g., 1.0.0). If not specified, uses version from gradle.properties'
+        required: false
         type: string
 
 jobs:
