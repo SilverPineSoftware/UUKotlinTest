@@ -15,12 +15,12 @@ jobs:
   run-tests:
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_tests.yml@main
     with:
-      module_path: 'library'
+      module_name: 'library'
     
   run-instrumented-tests:
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_instrumented_tests.yml@main
     with:
-      module_path: 'library_instrumented'
+      module_name: 'library_instrumented'
 
   publish-library-snapshot:
     needs: [run-tests]
