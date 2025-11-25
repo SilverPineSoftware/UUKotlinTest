@@ -13,7 +13,7 @@ concurrency:
 jobs:
 
   get-build-suffix:
-    uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-get-snapshot-build-suffix.yml@main
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_get_snapshot_build_suffix.yml@main
 
   run-tests:
     needs: [get-build-suffix]
