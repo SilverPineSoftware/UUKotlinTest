@@ -1,0 +1,11 @@
+name: Run Unit Tests
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  run-tests:
+    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_tests.yml@main
+    with:
+      module_name: 'library'
+      
