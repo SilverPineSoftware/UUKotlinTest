@@ -30,7 +30,7 @@ jobs:
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
 
   publish-library-snapshot:
-    needs: [get-build-suffix,run-tests]
+    needs: [get-build-suffix, run-tests]
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_library_publish_snapshot.yml@main
     with:
       module_name: 'library'
