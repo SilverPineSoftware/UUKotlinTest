@@ -2,18 +2,10 @@ name: Run Unit Tests
 
 on:
   workflow_dispatch:
-    inputs:
-      snapshot:
-        description: 'Is this a snapshot build?'
-        required: true
-        type: boolean
-        default: 'false'
-
-  
+ 
 jobs:
   run-tests:
     uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_tests.yml@main
     with:
       module_name: 'library'
-      is_snapshot_build: ${{ inputs.snapshot }}
       
