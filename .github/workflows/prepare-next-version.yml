@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Prepare Next Version
-        uses: SilverPineSoftware/UUKotlinBuild/.github/actions/uu-prepare-next-version@main
+        uses: SilverPineSoftware/UUGithubActions/.github/actions/uu-android-prepare-next-version@main
         with:
           release_pat: ${{ secrets.RELEASE_PAT }}
-

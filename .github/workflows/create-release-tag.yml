@@ -1,7 +1,7 @@
 name: Create Release Tag
 permissions:
   contents: write
-  
+
 on:
   workflow_dispatch:
     inputs:
@@ -13,9 +13,8 @@ on:
 
 jobs:
   create-tag:
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_create_release_tag.yml@main
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_create_release_tag.yml@main
     with:
       version: ${{ inputs.version }}
     secrets:
       RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
-      

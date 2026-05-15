@@ -1,0 +1,9 @@
+[versions]
+
+# library
+constraintlayout = "2.2.1"
+
+[libraries]
+
+# library
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }

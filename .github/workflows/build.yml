@@ -2,10 +2,11 @@ name: Build Only (No Publish)
 
 on:
   workflow_dispatch:
- 
+
 jobs:
   build:
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_build.yml@main
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_build.yml@main
     with:
       module_name: 'library'
-      
+    secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}

@@ -4,38 +4,43 @@ permissions: read-all
 on:
   push:
     branches:
-        - develop
+      - develop
 
 concurrency:
   group: publish-to-stage-${{ github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
 
   get-build-suffix:
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_get_snapshot_build_suffix.yml@main
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_get_snapshot_build_suffix.yml@main
 
   run-tests:
     needs: [get-build-suffix]
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_tests.yml@main
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_tests.yml@main
     with:
       module_name: 'library'
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
-    
+    secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
+
   run-instrumented-tests:
-    needs: [get-build-suffix]
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_instrumented_tests.yml@main
+    needs: [get-build-suffix, run-tests]
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_instrumented_tests.yml@main
     with:
       module_name: 'library_instrumented'
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
+    secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
 
   publish-library-snapshot:
-    needs: [get-build-suffix, run-tests]
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_library_publish_snapshot.yml@main
+    needs: [get-build-suffix, run-instrumented-tests]
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_snapshot.yml@main
     with:
       module_name: 'library'
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
     secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
       MAVEN_CENTRAL_NEXUS_URL: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
       MAVEN_CENTRAL_SNAPSHOT_URL: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -44,14 +49,15 @@ jobs:
       SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
       SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
-      
+
   publish-library-instrumented-snapshot:
     needs: [get-build-suffix, run-instrumented-tests]
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_library_publish_snapshot.yml@main
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_snapshot.yml@main
     with:
       module_name: 'library_instrumented'
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
     secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
       MAVEN_CENTRAL_NEXUS_URL: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
       MAVEN_CENTRAL_SNAPSHOT_URL: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -60,4 +66,3 @@ jobs:
       SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
       SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
-      

@@ -26,7 +26,9 @@ on:
 
 jobs:
   run-instrumented-tests:
-    uses: SilverPineSoftware/UUKotlinBuild/.github/workflows/uu_instrumented_tests.yml@main
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_instrumented_tests.yml@main
     with:
       configuration: ${{ inputs.configuration }}
       module_name: 'library_instrumented'
+    secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
