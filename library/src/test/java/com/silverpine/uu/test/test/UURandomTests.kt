@@ -6,8 +6,8 @@ import com.silverpine.uu.test.uuRandomLettersOrNumbers
 import com.silverpine.uu.test.uuRandomNumbers
 import com.silverpine.uu.test.uuRandomWord
 import com.silverpine.uu.test.uuRandomWords
-import org.junit.Assert.assertNotNull
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 
 class UURandomTests
 {

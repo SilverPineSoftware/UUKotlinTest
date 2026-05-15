@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.silverpine.uu.test.UUParcelableBaseTest
 import kotlinx.parcelize.Parcelize
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 @Keep
 class MyParcelableObject(): Parcelable

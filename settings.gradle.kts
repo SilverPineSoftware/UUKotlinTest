@@ -15,7 +15,6 @@ pluginManagement {
                     ?: System.getenv("GITHUB_TOKEN")
             }
         }
-        mavenLocal()
     }
 }
 
@@ -35,7 +34,6 @@ dependencyResolutionManagement {
                     ?: System.getenv("GITHUB_TOKEN")
             }
         }
-        mavenLocal()
     }
     versionCatalogs {
         register("uuBuild") {
