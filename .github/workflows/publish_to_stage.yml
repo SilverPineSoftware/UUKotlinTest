@@ -15,7 +15,7 @@ jobs:
   get-build-suffix:
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_get_snapshot_build_suffix.yml@main
 
-  run-tests:
+  run-tests-library:
     needs: [get-build-suffix]
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_tests.yml@main
     with:
@@ -24,21 +24,39 @@ jobs:
     secrets:
       READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
 
-  run-instrumented-tests:
-    needs: [get-build-suffix, run-tests]
+  run-instrumented-tests-library:
+    needs: [get-build-suffix]
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_instrumented_tests.yml@main
+    with:
+      module_name: 'library'
+      build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
+    secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
+
+  run-tests-library-instrumented:
+    needs: [get-build-suffix]
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_tests.yml@main
     with:
       module_name: 'library_instrumented'
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
     secrets:
       READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
 
+  run-instrumented-tests-library-instrumented:
+    needs: [get-build-suffix]
+    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_instrumented_tests.yml@main
+    with:
+      module_name: 'library_instrumented'
+      build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
+    secrets:
+      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
+  
   # See note in publish.yml: a single Gradle invocation publishes all release
   # publications across all subprojects (library + library_instrumented) into
   # one snapshot deployment. Running two parallel jobs would race on the same
   # staging profile.
   publish-libraries-snapshot:
-    needs: [get-build-suffix, run-instrumented-tests]
+    needs: [get-build-suffix, run-tests-library, run-instrumented-tests-library, run-tests-library-instrumented, run-instrumented-tests-library-instrumented]
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_snapshot.yml@main
     with:
       module_name: 'library'
