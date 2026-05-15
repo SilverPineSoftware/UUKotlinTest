@@ -24,7 +24,12 @@ jobs:
     secrets:
       READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
 
-  publish-library:
+  # nexus-publish is applied at the root project, so a single Gradle invocation
+  # uploads all release publications across all subprojects (library +
+  # library_instrumented) into one staging repository, then close+releases it
+  # as a single Maven Central deployment. Splitting this into two jobs would
+  # race for the same staging profile and leave orphaned staging repos.
+  publish-libraries:
     needs: [run-instrumented-tests]
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_release.yml@main
     with:
@@ -40,24 +45,8 @@ jobs:
       SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
       SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
 
-  publish-library-instrumented:
-    needs: [run-instrumented-tests]
-    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_release.yml@main
-    with:
-      module_name: 'library_instrumented'
-    secrets:
-      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
-      MAVEN_CENTRAL_NEXUS_URL: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
-      MAVEN_CENTRAL_SNAPSHOT_URL: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-      SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
-
   create-release:
-    needs: [run-tests, run-instrumented-tests, publish-library, publish-library-instrumented]
+    needs: [run-tests, run-instrumented-tests, publish-libraries]
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_create_release.yml@main
     secrets:
       UU_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

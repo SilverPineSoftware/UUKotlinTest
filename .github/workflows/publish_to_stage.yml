@@ -33,28 +33,15 @@ jobs:
     secrets:
       READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
 
-  publish-library-snapshot:
+  # See note in publish.yml: a single Gradle invocation publishes all release
+  # publications across all subprojects (library + library_instrumented) into
+  # one snapshot deployment. Running two parallel jobs would race on the same
+  # staging profile.
+  publish-libraries-snapshot:
     needs: [get-build-suffix, run-instrumented-tests]
     uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_snapshot.yml@main
     with:
       module_name: 'library'
-      build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
-    secrets:
-      READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
-      MAVEN_CENTRAL_NEXUS_URL: ${{ secrets.MAVEN_CENTRAL_NEXUS_URL }}
-      MAVEN_CENTRAL_SNAPSHOT_URL: ${{ secrets.MAVEN_CENTRAL_SNAPSHOT_URL }}
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-      SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
-
-  publish-library-instrumented-snapshot:
-    needs: [get-build-suffix, run-instrumented-tests]
-    uses: SilverPineSoftware/UUGithubActions/.github/workflows/uu_android_library_publish_snapshot.yml@main
-    with:
-      module_name: 'library_instrumented'
       build_suffix: ${{ needs.get-build-suffix.outputs.build_suffix }}
     secrets:
       READ_PACKAGES_PAT: ${{ secrets.CI_READ_PACKAGES_GITHUB_TOKEN }}
