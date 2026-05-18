@@ -29,7 +29,7 @@ object UUTestPermissions
             val packageInfo = pm.getPackageInfo(pkg, PackageManager.PackageInfoFlags.of(flags))
             packageInfo.requestedPermissions?.contains(permission) == true
         }
-        catch (e: Exception)
+        catch (_: Exception)
         {
             false
         }
