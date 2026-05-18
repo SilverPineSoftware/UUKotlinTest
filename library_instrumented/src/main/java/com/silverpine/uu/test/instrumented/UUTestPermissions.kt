@@ -70,15 +70,8 @@ object UUTestPermissions
 
     fun grantBlePermissions()
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-        {
-            grant(Manifest.permission.BLUETOOTH_SCAN)
-            grant(Manifest.permission.BLUETOOTH_CONNECT)
-            grant(Manifest.permission.BLUETOOTH_ADVERTISE)
-        }
-        else
-        {
-            grant(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
+        grant(Manifest.permission.BLUETOOTH_SCAN)
+        grant(Manifest.permission.BLUETOOTH_CONNECT)
+        grant(Manifest.permission.BLUETOOTH_ADVERTISE)
     }
 }
