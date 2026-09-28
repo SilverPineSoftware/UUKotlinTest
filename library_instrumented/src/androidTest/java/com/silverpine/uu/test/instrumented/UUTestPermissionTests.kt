@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
+import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,34 +22,49 @@ class UUTestPermissionTests
 
     @Test
     @SdkSuppress(minSdkVersion = 33)
-    fun testGrantPermissions() = runBlocking()
+    fun testGrantPermissions()
+    {
+        UUTestPermissions.grant(Manifest.permission.CAMERA)
+        assertCameraGranted()
+    }
+
+    @Test
+    @SdkSuppress(minSdkVersion = 33)
+    fun testGrantPermissions_twice()
+    {
+        UUTestPermissions.grant(Manifest.permission.CAMERA)
+        assertCameraGranted()
+        UUTestPermissions.grant(Manifest.permission.CAMERA)
+        assertCameraGranted()
+    }
+
+    /** Run in isolation using scripts/test_permission_transition.sh, which revokes before launch. */
+    /*@Test
+    @SdkSuppress(minSdkVersion = 33)
+    fun testGrantPermissions_deniedToGranted()
+    {
+        assumeTrue(
+            "Requires isolated pre-launch CAMERA revocation; use scripts/test_permission_transition.sh",
+            InstrumentationRegistry.getArguments().getString("uuCameraInitiallyDenied") == "true"
+        )
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        assertEquals(
+            "CAMERA must be denied by the runner before instrumentation starts",
+            PackageManager.PERMISSION_DENIED,
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+        )
+        UUTestPermissions.grant(Manifest.permission.CAMERA)
+        assertCameraGranted()
+    }*/
+
+    private fun assertCameraGranted()
     {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-        rule.uuSetTitle("UUTestPermissions")
-        rule.uuSetTestName("testGrantPermissions")
-        Thread.sleep(2000)
-
-        rule.uuAppendOutputLine("Checking Permissions")
-        Thread.sleep(2000)
-
-        val permission = Manifest.permission.CAMERA
-        var granted = ContextCompat.checkSelfPermission(context, permission)
-        assertEquals(PackageManager.PERMISSION_DENIED, granted)
-
-        rule.uuAppendOutputLine("Granting permissions with UUTestPermissions")
-        Thread.sleep(2000)
-
-        UUTestPermissions.grant(permission)
-
-        rule.uuAppendOutputLine("Checking permissions")
-        Thread.sleep(2000)
-
-        granted = ContextCompat.checkSelfPermission(context, permission)
-        assertEquals(PackageManager.PERMISSION_GRANTED, granted)
-
-        rule.uuAppendOutputLine("All done")
-        Thread.sleep(2000)
+        assertEquals(
+            "CAMERA should be granted after grant()",
+            PackageManager.PERMISSION_GRANTED,
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+        )
     }
 
     @Test
