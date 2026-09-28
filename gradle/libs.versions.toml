@@ -1,7 +1,7 @@
 [versions]
 
 # library
-constraintlayout = "2.2.1"
+constraintlayout = "2.2.2"
 
 [libraries]
 
