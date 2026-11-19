@@ -11,7 +11,6 @@ dependencies {
     implementation(uuBuild.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(uuBuild.mockito.core)
-    implementation(uuBuild.mockito.inline)
     implementation(uuBuild.androidx.junit)
     implementation(uuBuild.androidx.espresso.core)
 
@@ -22,12 +21,8 @@ dependencies {
     testImplementation(uuBuild.junit.jupiter.params)
     testRuntimeOnly(uuBuild.junit.platform.launcher)
     testImplementation(uuBuild.mockito.junit.jupiter)
-    testImplementation(uuBuild.mockito.core)
-    testImplementation(uuBuild.mockito.inline)
     testImplementation(uuBuild.mockito.kotlin)
 
-    androidTestImplementation(uuBuild.androidx.junit)
-    androidTestImplementation(uuBuild.androidx.espresso.core)
     androidTestImplementation(uuBuild.kotlin.test)
 }
 
